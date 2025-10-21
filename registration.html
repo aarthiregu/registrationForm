@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Registration Form</title>
+  
+</head>
+<body>
+  <form id="form" onsubmit="validateform(event)">
+    <h1>Registration Form</h1>
+
+    <label for="username">User name</label>
+    <input id="username" type="text" name="username">
+    <span id="username-error" class="error"></span>
+
+    <label for="email">Email</label>
+    <input id="mail" type="email" name="email">
+    <span id="mail-error" class="error"></span>
+
+    <label for="message">Message (max 200 characters)</label>
+    <textarea id="message" name="message" maxlength="200"></textarea>
+    <small id="char-count">0 / 200</small>
+    <span id="message-error" class="error"></span>
+
+    <label for="password1">Password</label>
+    <input id="pass1" type="password" name="password1">
+    <span id="pass1-error" class="error"></span>
+
+    <label for="password2">Confirm Password</label>
+    <input id="pass2" type="password" name="password2">
+    <span id="pass2-error" class="error"></span>
+
+    <button id="submit" type="submit">Submit</button>
+  </form>
+
+  <script>
+    const messageBox = document.getElementById("message");
+    const charCount = document.getElementById("char-count");
+
+    // Live character counter
+    messageBox.addEventListener("input", () => {
+      const currentLength = messageBox.value.length;
+      charCount.textContent = `${currentLength} / 200`;
+    });
+
+    function validateform(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('mail').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const password1 = document.getElementById('pass1').value.trim();
+      const password2 = document.getElementById('pass2').value.trim();
+
+      const usernameerror = document.getElementById('username-error');
+      const emailerror = document.getElementById('mail-error');
+      const messageerror = document.getElementById('message-error');
+      const password1error = document.getElementById('pass1-error');
+      const password2error = document.getElementById('pass2-error');
+
+      // Clear old errors
+      usernameerror.textContent = '';
+      emailerror.textContent = '';
+      messageerror.textContent = '';
+      password1error.textContent = '';
+      password2error.textContent = '';
+
+      // Remove red borders
+      document.querySelectorAll('input, textarea').forEach(el => el.classList.remove('error-border'));
+
+      let valid = true;
+
+      if (username === '' || /\d/.test(username)) {
+        usernameerror.textContent = "Please enter your name properly";
+        document.getElementById('username').classList.add('error-border');
+        valid = false;
+      }
+
+      if (email === '' || !email.includes('@')) {
+        emailerror.textContent = "Please enter a valid email address";
+        document.getElementById('mail').classList.add('error-border');
+        valid = false;
+      }
+
+      if (message === '') {
+        messageerror.textContent = "Please enter your message";
+        document.getElementById('message').classList.add('error-border');
+        valid = false;
+      } else if (message.length > 200) {
+        messageerror.textContent = "Message should not exceed 200 characters";
+        document.getElementById('message').classList.add('error-border');
+        valid = false;
+      }
+
+      if (password1 === '' || password1.length < 6) {
+        password1error.textContent = "Password must be at least 6 characters";
+        document.getElementById('pass1').classList.add('error-border');
+        valid = false;
+      }
+
+      if (password2 === '' || password2.length < 6) {
+        password2error.textContent = "Password must be at least 6 characters";
+        document.getElementById('pass2').classList.add('error-border');
+        valid = false;
+      }
+
+      if (password1 !== password2) {
+        password2error.textContent = "Passwords do not match";
+        document.getElementById('pass2').classList.add('error-border');
+        valid = false;
+      }
+
+      if (valid) {
+        alert("Form submitted successfully!");
+        document.getElementById('form').reset();
+        charCount.textContent = "0 / 200";
+      }
+
+      return valid;
+    }
+  </script>
+</body>
+</html>
